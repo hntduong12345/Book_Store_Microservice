@@ -5,8 +5,8 @@ namespace Users.Domain.Interfaces
     public interface IUserRepository
     {
         //Get functions
-        Task<User?> GetByIdAsync(Guid id);
-        Task<User?> GetByEmailAsync(string email);
+        Task<User?> GetByIdAsync(Guid id, bool includeAddresses);
+        Task<User?> GetByEmailAsync(string email, bool includeAddresses);
 
         //Insert functions
         Task InsertAsync(User user);
