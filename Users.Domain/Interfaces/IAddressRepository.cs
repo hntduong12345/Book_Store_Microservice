@@ -7,11 +7,11 @@ namespace Users.Domain.Interfaces
         Task<IEnumerable<Address>> GetByUserIdAsync(Guid userId);
         Task<Address?> GetByIdAsync(int id);
 
-        Task<int> AddAsync(Address address);
-        Task UpdateAsync(Address address);
-        Task DeleteAsync(int id);
+        Task<int> InsertAsync(Address address);
 
+        Task<int> UpdateAsync(Address address);
         // Logic to ensure only one 'is_default' address exists
-        Task SetDefaultAddressAsync(Guid userId, int addressId);
+        Task<int> SetDefaultAddressAsync(Guid userId, int addressId);
+        Task<int> DeleteAsync(int id);
     }
 }
