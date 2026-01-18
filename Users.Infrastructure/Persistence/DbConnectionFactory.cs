@@ -8,11 +8,11 @@ namespace Users.Infrastructure.Persistence
     {
         public async Task<IDbConnection> CreateConnectionAsync()
         {
-            var connectionString = config.GetConnectionString("");
+            var connectionString = config.GetConnectionString("bookstoreuser");
 
             if (string.IsNullOrEmpty(connectionString))
             {
-                throw new InvalidOperationException("Postgres connection string '' is missing.");
+                throw new InvalidOperationException("Postgres connection string 'bookstoreuser' is missing.");
             }
 
             var connection = new NpgsqlConnection(connectionString);

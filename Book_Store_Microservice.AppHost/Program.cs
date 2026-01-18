@@ -1,7 +1,13 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddProject<Projects.Books_Api>("books-api");
+//Define Postgres Server
+//var postgres = builder.AddPostgres("postgres").WithPgAdmin();
 
-builder.AddProject<Projects.Users_Api>("users-api");
+//Define Postgres Database
+var userDb = builder.AddConnectionString("bookstoreuser");
+
+//Setup reference to APIs
+builder.AddProject<Projects.Books_Api>("books-api");
+builder.AddProject<Projects.Users_Api>("users-api").WithReference(userDb);
 
 builder.Build().Run();
