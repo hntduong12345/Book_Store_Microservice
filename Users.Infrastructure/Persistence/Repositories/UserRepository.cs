@@ -87,18 +87,18 @@ namespace Users.Infrastructure.Persistence.Repositories
         }
 
         //Insert functions
-        public async Task InsertAsync(User user)
+        public async Task<int> InsertAsync(User user)
         {
             using var connection = await connectionFactory.CreateConnectionAsync();
             var sql = @"
                 INSERT INTO users (id, email, first_name, last_name, is_active)
                 VALUES (@Id, @Email, @FirstName, @LastName, @IsActive)";
 
-            await connection.ExecuteAsync(sql, user);
+            return await connection.ExecuteAsync(sql, user);
         }
 
         //Update functions
-        public async Task UpdateAsync(User user)
+        public async Task<int> UpdateAsync(User user)
         {
             using var connection = await connectionFactory.CreateConnectionAsync();
             var sql = @"
@@ -110,11 +110,11 @@ namespace Users.Infrastructure.Persistence.Repositories
                     is_archived = @IsArchived,
                 WHERE id = @Id AND is_archived = false";
 
-            await connection.ExecuteAsync(sql, user);
+            return await connection.ExecuteAsync(sql, user);
         }
 
         //Soft delete functions
-        public async Task ArchivedAsync(Guid id)
+        public async Task<int> ArchivedAsync(Guid id)
         {
             using var connection = await connectionFactory.CreateConnectionAsync();
             var sql = @"
@@ -122,7 +122,7 @@ namespace Users.Infrastructure.Persistence.Repositories
                 SET is_archived = true, update_at = NOW()
                 WHERE id = @Id";
 
-            await connection.ExecuteAsync(sql, new { Id = id});
+            return await connection.ExecuteAsync(sql, new { Id = id});
         }
     }
 }

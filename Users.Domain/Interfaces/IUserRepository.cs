@@ -9,12 +9,12 @@ namespace Users.Domain.Interfaces
         Task<User?> GetByEmailAsync(string email, bool includeAddresses);
 
         //Insert functions
-        Task InsertAsync(User user);
+        Task<int> InsertAsync(User user);
 
         //Update functions
-        Task UpdateAsync(User user);
+        Task<int> UpdateAsync(User user);
 
         //Soft delete function
-        Task ArchivedAsync(Guid id);
+        Task<int> ArchivedAsync(Guid id);
     }
 }

@@ -16,6 +16,7 @@ namespace Users.Infrastructure
         {
             services.AddSingleton<DbConnectionFactory>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IAddressRepository, AddressRepository>();
 
             return services;
         }
