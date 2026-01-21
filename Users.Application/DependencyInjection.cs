@@ -10,6 +10,7 @@ namespace Users.Application
         {
             // Register the business logic service
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAddressService, AddressService>();
 
             return services;
         }

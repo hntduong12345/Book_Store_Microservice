@@ -12,16 +12,14 @@ namespace Users.Application.Services
     {
         public async Task<UserResponse?> GetUserByIdAsync(Guid id)
         {
-            var user = await repository.GetActiveByIdAsync(id, includeAddresses: true);
-            if(user == null) 
+            var user = await repository.GetActiveByIdAsync(id, includeAddresses: true) ??
                 throw new NotFoundException($"User with id {id} is not found");
             return user?.ToResponse();
         }
 
         public async Task<UserResponse?> GetUserByEmailAsync(string email)
         {
-            var user = await repository.GetByEmailAsync(email, includeAddresses: true);
-            if (user == null)
+            var user = await repository.GetByEmailAsync(email, includeAddresses: true) ??
                 throw new NotFoundException($"User with email {email} is not found");
             return user?.ToResponse();
         }
@@ -37,8 +35,7 @@ namespace Users.Application.Services
 
         public async Task UpdateUserAsync(Guid id, UpdateUserRequest request)
         {
-            var user = await repository.GetByIdAsync(id);
-            if (user == null)
+            var user = await repository.GetByIdAsync(id) ??
                 throw new NotFoundException($"User with id {id} is not found");
 
             user.UpdateFromRequest(request);
@@ -50,8 +47,7 @@ namespace Users.Application.Services
 
         public async Task ArchivedUserAsync(Guid id)
         {
-            var user = await repository.GetActiveByIdAsync(id, includeAddresses: false);
-            if (user == null)
+            var user = await repository.GetActiveByIdAsync(id, includeAddresses: false) ??
                 throw new NotFoundException($"User with id {id} is not found");
 
             bool isCommitted = await repository.ArchivedAsync(id) > 0;
