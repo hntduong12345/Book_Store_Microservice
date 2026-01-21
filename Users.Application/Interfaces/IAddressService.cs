@@ -14,7 +14,7 @@ namespace Users.Application.Interfaces
         Task<IList<AddressResponse>> GetUserAddressesAsync(Guid userId);
         Task CreateAddressAsync(CreateAddressRequest request);
         Task UpdateAddressAsync(int id, UpdateAddressRequest request);
-        Task SetDefaultAddress(Guid userId, int addressId);
+        Task SetDefaultAddressAsync(Guid userId, int addressId);
         Task DeleteAddressAsync(int id);
     }
 }

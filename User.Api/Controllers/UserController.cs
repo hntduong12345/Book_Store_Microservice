@@ -13,14 +13,14 @@ namespace Users.Api.Controllers
         public async Task<IActionResult> GetUserById([FromRoute]Guid id)
         {
             var user = await userService.GetUserByIdAsync(id);
-            return user is not null ? Ok(user) : NotFound();
+            return Ok(user);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetUserByEmail([FromQuery]string email)
         {
             var user = await userService.GetUserByEmailAsync(email);
-            return user is not null ? Ok(user) : NotFound();
+            return Ok(user);
         }
 
         [HttpPost]

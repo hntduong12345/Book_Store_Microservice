@@ -46,7 +46,7 @@ namespace Users.Application.Services
                 throw new ConflictException("Error occurs when update address");
         }
 
-        public async Task SetDefaultAddress(Guid userId, int addressId)
+        public async Task SetDefaultAddressAsync(Guid userId, int addressId)
         {
             bool isCommitted = await repository.SetDefaultAddressAsync(userId, addressId) > 0;
             if (!isCommitted)
