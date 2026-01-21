@@ -36,6 +36,7 @@ namespace Users.Api.Middlewares
             switch (exception)
             {
                 case BadHttpRequestException:
+                case InvalidOperationException:
                     response.StatusCode = (int)HttpStatusCode.BadRequest;
                     errorResponse.StatusCode = (int)HttpStatusCode.BadRequest;
                     _logger.LogInformation(exception.Message);
