@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Users.Application.DTOs;
+using Users.Domain.Exceptions;
 
 namespace Users.Api.Middlewares
 {
@@ -42,6 +43,16 @@ namespace Users.Api.Middlewares
                 case UnauthorizedAccessException:
                     response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     errorResponse.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    _logger.LogInformation(exception.Message);
+                    break;
+                case ConflictException:
+                    response.StatusCode = (int)HttpStatusCode.Conflict;
+                    errorResponse.StatusCode = (int)HttpStatusCode.Conflict;
+                    _logger.LogInformation(exception.Message);
+                    break;
+                case NotFoundException:
+                    response.StatusCode = (int)HttpStatusCode.NotFound;
+                    errorResponse.StatusCode = (int)HttpStatusCode.NotFound;
                     _logger.LogInformation(exception.Message);
                     break;
                 default:

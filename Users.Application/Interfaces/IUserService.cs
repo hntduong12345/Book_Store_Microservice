@@ -11,6 +11,10 @@ namespace Users.Application.Interfaces
     public interface IUserService
     {
         Task<UserResponse?> GetUserByIdAsync(Guid id);
+        Task<UserResponse?> GetUserByEmailAsync(string email);
+
         Task CreateUserAsync(CreateUserRequest request);
+        Task UpdateUserAsync(Guid id, UpdateUserRequest request);
+        Task ArchivedUserAsync(Guid id);
     }
 }
