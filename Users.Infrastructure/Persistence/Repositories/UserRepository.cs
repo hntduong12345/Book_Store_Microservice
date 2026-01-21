@@ -23,7 +23,7 @@ namespace Users.Infrastructure.Persistence.Repositories
             {
                 return await connection.QueryFirstOrDefaultAsync<User>(
                     "SELECT * FROM users WHERE LOWER(email) = LOWER(@Email) AND is_archived = false",
-                    new {Email = email}
+                    new { Email = email }
                     );
             }
 
@@ -34,22 +34,23 @@ namespace Users.Infrastructure.Persistence.Repositories
                 WHERE LOWER(u.email) = LOWER(@Email) AND u.is_archived = false";
 
             var userDict = new Dictionary<Guid, User>();
-            await connection.QueryAsync<User, Address, User>(sql, (user, address) => {
-                if(!userDict.TryGetValue(user.Id, out var existingUser))
+            await connection.QueryAsync<User, Address, User>(sql, (user, address) =>
+            {
+                if (!userDict.TryGetValue(user.Id, out var existingUser))
                 {
                     existingUser = user;
                     userDict.Add(existingUser.Id, existingUser);
                 }
 
-                if(address is not null)
+                if (address is not null)
                     existingUser.Addresses.Add(address);
                 return existingUser;
-            }, new { Email = email});
+            }, new { Email = email });
 
             return userDict.Values.FirstOrDefault();
         }
 
-        public async Task<User?> GetByIdAsync(Guid id, bool includeAddresses)
+        public async Task<User?> GetActiveByIdAsync(Guid id, bool includeAddresses)
         {
             using var connection = await connectionFactory.CreateConnectionAsync();
             //Map entity attribute have underscore in db with the entity in class
@@ -71,7 +72,8 @@ namespace Users.Infrastructure.Persistence.Repositories
                 WHERE u.id = @Id AND u.is_archived = false";
 
             var userDict = new Dictionary<Guid, User>();
-            await connection.QueryAsync<User, Address, User>(sql, (user, address) => {
+            await connection.QueryAsync<User, Address, User>(sql, (user, address) =>
+            {
                 if (!userDict.TryGetValue(user.Id, out var existingUser))
                 {
                     existingUser = user;
@@ -84,6 +86,19 @@ namespace Users.Infrastructure.Persistence.Repositories
             }, new { Id = id });
 
             return userDict.Values.FirstOrDefault();
+        }
+
+        //For Update and Admin/Manager usage
+        public async Task<User?> GetByIdAsync(Guid id)
+        {
+            using var connection = await connectionFactory.CreateConnectionAsync();
+            //Map entity attribute have underscore in db with the entity in class
+            DefaultTypeMap.MatchNamesWithUnderscores = true;
+
+            return await connection.QueryFirstOrDefaultAsync<User>(
+                "SELECT * FROM users WHERE id = @Id",
+                new { Id = id }
+                );
         }
 
         //Insert functions
@@ -107,8 +122,8 @@ namespace Users.Infrastructure.Persistence.Repositories
                     first_name = @FirstName,
                     last_name = @LastName,
                     is_active = @IsActive,
-                    is_archived = @IsArchived,
-                WHERE id = @Id AND is_archived = false";
+                    is_archived = @IsArchived
+                WHERE id = @Id";
 
             return await connection.ExecuteAsync(sql, user);
         }
@@ -119,10 +134,10 @@ namespace Users.Infrastructure.Persistence.Repositories
             using var connection = await connectionFactory.CreateConnectionAsync();
             var sql = @"
                 UPDATE users 
-                SET is_archived = true, update_at = NOW()
+                SET is_archived = true, updated_at = NOW()
                 WHERE id = @Id";
 
-            return await connection.ExecuteAsync(sql, new { Id = id});
+            return await connection.ExecuteAsync(sql, new { Id = id });
         }
     }
 }

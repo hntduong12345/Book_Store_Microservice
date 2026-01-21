@@ -12,7 +12,7 @@ namespace Users.Application.Services
     {
         public async Task<UserResponse?> GetUserByIdAsync(Guid id)
         {
-            var user = await repository.GetByIdAsync(id, includeAddresses: true);
+            var user = await repository.GetActiveByIdAsync(id, includeAddresses: true);
             if(user == null) 
                 throw new NotFoundException($"User with id {id} is not found");
             return user?.ToResponse();
@@ -37,20 +37,20 @@ namespace Users.Application.Services
 
         public async Task UpdateUserAsync(Guid id, UpdateUserRequest request)
         {
-            var user = await repository.GetByIdAsync(id, includeAddresses: false);
+            var user = await repository.GetByIdAsync(id);
             if (user == null)
                 throw new NotFoundException($"User with id {id} is not found");
 
             user.UpdateFromRequest(request);
 
-            bool isCommitted = await repository.InsertAsync(user) > 0;
+            bool isCommitted = await repository.UpdateAsync(user) > 0;
             if (!isCommitted)
                 throw new ConflictException("Error occurs when update user");
         }
 
         public async Task ArchivedUserAsync(Guid id)
         {
-            var user = await repository.GetByIdAsync(id, includeAddresses: false);
+            var user = await repository.GetActiveByIdAsync(id, includeAddresses: false);
             if (user == null)
                 throw new NotFoundException($"User with id {id} is not found");
 
